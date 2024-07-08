@@ -26,13 +26,28 @@ public class Order {
         this.status = status;
         this.client = client;
     }
-
+    
+    //Método função é adicionar os item em list
     public void addItem(OrderItem item){
         items.add(item);
     }
+    
+    //Método função é remover os item da list
+    public void removeItem(String id) {
 
-    public void removeItem(OrderItem item) {
-        items.remove(item);
+        OrderItem productId = items.stream().filter(item -> item.getProduct().getId().equals(id)).findFirst().orElse(null);
+
+        if(productId != null){
+            items.remove(productId);
+            System.out.println("Product removed successfully!");
+            System.out.println();
+            System.out.println(toString());
+            System.out.println();
+        }else {
+            System.out.println();
+            System.out.println("non-existent product!");
+            System.out.println();
+        }
     }
 
 
@@ -70,6 +85,7 @@ public class Order {
         return items;
     }
     
+    //Função total() contabilizar o total preço unitaio de todos os items existentes na lista
     public Double total(){
         Double sum = 0.0;
         for(OrderItem item : items){
@@ -78,7 +94,7 @@ public class Order {
         return sum;
     }
 
-
+    //Função imprimir todos os dados do cliente e em seguida os dados do pedido do cliente feito
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -86,12 +102,14 @@ public class Order {
         sb.append("Order moment: "+fmt1.format(moment)+"\n");
         sb.append("Order Status: "+status+"\n");
         sb.append("Client: "+client.getName()+" ("+fmt2.format(client.getBirthDate())+") - ("+client.getEmail()+") \n");
+        sb.append("----------------------------------\n");
         sb.append("Order items:\n");
         for(OrderItem item : items){
-           sb.append(item.getProduct().getName()+", $"+String.format("%.2f", item.getProduct().getPrice())
+           sb.append("Cod - "+item.getProduct().getId()+", "+item.getProduct().getName()+", $"+String.format("%.2f", item.getProduct().getPrice())
                  +", Quantity: "+item.getQuantity()+", SubTotal: $"+String.format("%.2f", item.subTotal())+"\n");
         }
-        sb.append("Total price: $"+String.format("%.2f", total()));
+        sb.append("Total price: $"+String.format("%.2f", total())+"\n");
+        sb.append("----------------------------------\n");
         return sb.toString();
         
     }
