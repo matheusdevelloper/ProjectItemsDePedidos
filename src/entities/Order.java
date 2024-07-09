@@ -39,6 +39,7 @@ public class Order {
 
         if(productId != null){
             items.remove(productId);
+            System.out.println();
             System.out.println("Product removed successfully!");
             System.out.println();
             System.out.println(toString());
